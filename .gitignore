@@ -1,0 +1,38 @@
+# Compiled programs
+bin/
+*.o
+*.out
+*.so
+
+bench_hmac
+ids_daemon
+ids_runner
+signed_sender
+test_v3
+test_debug
+test_v3_debug
+
+# Python cache
+__pycache__/
+*.pyc
+.venv/
+
+# Generated results and captures
+results/
+*.log
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Internal research documents
+notes.md
+RESPONSE_TO_REVIEWERS.md
+
+# IDE
+.vscode/
+
+# Temporary files
+*~
+*.swp
