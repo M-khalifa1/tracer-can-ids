@@ -16,4 +16,3 @@ The implementation, experimental procedures, reported results, and scientific in
 
 AI-generated suggestions were not treated as independent experimental evidence.
 
-The authors retain full responsibility for the scientific accuracy, integrity, and conclusions of this work.
