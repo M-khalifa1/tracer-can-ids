@@ -375,13 +375,8 @@ The accompanying research manuscript describes an archived physical CAN campaign
 - **Physical evidence:** Generated test traces and offline alerts do not by themselves prove physical robot movement, denial of service, or prevention.
 - **Responsible operation:** Use only on systems you own or are authorized to test. Keep motion-capable demonstrations isolated and supervised. Review raw captures for private or sensitive infrastructure information before sharing.
 
-## Research manuscript and AI assistance
+## AI assistance
 
-**Related manuscript**
-
-> Mahmoud Ahmed Khalifa, Ahmad Taher Azar, and Walid El-Shafai. **“Experimental CAN Security Evaluation of a Commercial Unmanned Ground Vehicle with Intrusion Detection and Authentication Monitoring.”** Research manuscript, 2026.
-
-**Publication link / DOI:** _Add a verified public link when available._ The manuscript is not included in this repository, and the presence of a manuscript does not imply acceptance or publication.
 
 **AI assistance disclosure:** Generative AI tools were used for aspects of brainstorming, debugging guidance, experimental planning support, and writing/editing assistance. Researchers reviewed the outputs against their expertise and available evidence and retain responsibility for experimental execution, accuracy, interpretations, and claims. See [`AI_USAGE.md`](AI_USAGE.md) for the project disclosure.
 
