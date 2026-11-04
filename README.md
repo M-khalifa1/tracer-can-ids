@@ -153,7 +153,7 @@ make --version
 python3 --version
 ```
 
-If you need isolated Python dependencies, create a virtual environment:
+If you need isolated Python dependencies, create a  environment:
 
 ```bash
 python3 -m venv .venv
@@ -275,7 +275,7 @@ mkdir -p results
   | tee results/run_environment.txt
 ```
 
-For figure generation, install the required Python plotting packages into a virtual environment if needed:
+For figure generation, install the required Python plotting packages into a  environment if needed:
 
 ```bash
 python3 -m venv .venv
@@ -404,26 +404,26 @@ Retain `run_environment.txt`, the exact Git commit hash, stdout/test logs, all g
 
 **Offline completion criteria:** C tests pass; labeled synthetic frame files and their alert CSVs exist; `metrics.json` and `sweeps.json` parse as JSON; the plots are generated; toolchain and commit are recorded; and every reported statistic is labeled with its **source experiment**. The original **211-event physical campaign is not reproduced by this offline-only workflow**.
 
-### 7. Optional: exercise the live IDS using virtual CAN (no physical robot)
+### 7. Optional: exercise the live IDS using physical robot
 
-If your Ubuntu kernel provides `vcan`, this is a useful **full live-pipeline integration exercise** that generates traffic, captures it, checks it online, and replays it offline **without attaching the TRACER robot**. Use `vcan0`, **never `can0`**, for this test. A virtual CAN bus is not a timing-equivalent physical CAN network and does not reproduce arbitration or robot-controller behavior.
+If your Ubuntu kernel provides `can`, this is a useful **full live-pipeline integration exercise** that generates traffic, captures it, checks it online, and replays it offline ** attaching the TRACER robot**. Use `can0`.
 
-Create the isolated virtual interface:
+Create  interface:
 
 ```bash
-sudo modprobe vcan
-sudo ip link add dev vcan0 type vcan
-sudo ip link set vcan0 up
-ip -details link show vcan0
+sudo modprobe can
+sudo ip link add dev can0 type can
+sudo ip link set can0 up
+ip -details link show can0
 ```
 
 Open **three terminals** in the repository root. Start the two receivers first.
 
-**Terminal A — virtual bus recording**
+**Terminal A —  bus recording**
 
 ```bash
 mkdir -p results
-candump -L vcan0 > results/vcan_session.log
+candump -L can0 > results/can_session.log
 # Leave running until the sender finishes, then Ctrl+C.
 ```
 
@@ -431,31 +431,31 @@ candump -L vcan0 > results/vcan_session.log
 
 ```bash
 mkdir -p results
-sudo ./ids_daemon vcan0 results/vcan_live_alerts.csv
+sudo ./ids_daemon can0 results/can_live_alerts.csv
 # Leave running until after the sender finishes, then Ctrl+C.
 ```
 
-**Terminal C — virtual test command sender**
+**Terminal C —  test command sender**
 
 ```bash
-sudo ./signed_sender vcan0
+sudo ./signed_sender can0
 ```
 
-The demonstration sender executes its built-in **mode + motion + stop command sequence** against the **virtual interface only**. Do not change `vcan0` to `can0` while following this offline exercise. The two receivers should observe frames on `vcan0`; a lack of security alerts from correctly signed commands is not a test failure by itself.
+The demonstration sender executes its built-in **mode + motion + stop command sequence** against the ** interface only**. Do not change `can0` to `can0` while following this offline exercise. The two receivers should observe frames on `can0`; a lack of security alerts from correctly signed commands is not a test failure by itself.
 
-Once both receivers have stopped, replay the virtual capture:
+Once both receivers have stopped, replay the  capture:
 
 ```bash
-python3 candump2csv.py results/vcan_session.log results/vcan_frames.csv
-./ids_runner results/vcan_frames.csv results/vcan_replayed_alerts.csv suppress=0
-wc -l results/vcan_session.log
+python3 candump2csv.py results/can_session.log results/can_frames.csv
+./ids_runner results/can_frames.csv results/can_replayed_alerts.csv suppress=0
+wc -l results/can_session.log
 ```
 
-Compare the *types* of live/offline alerts, keeping in mind that the daemon and runner use different time sources and timeout scheduling. Clean up **only the virtual interface** when finished:
+Compare the *types* of live/offline alerts, keeping in mind that the daemon and runner use different time sources and timeout scheduling. Clean up **only the  interface** when finished:
 
 ```bash
-sudo ip link set vcan0 down
-sudo ip link del vcan0
+sudo ip link set can0 down
+sudo ip link del can0
 ```
 
 This is a reusable integration test for the SocketCAN path and companion-frame format, but it **does not** validate physical command execution, controller acceptance, actual CAN bus load, or online P99 latency.
@@ -689,13 +689,9 @@ The accompanying research manuscript describes an archived physical CAN campaign
 - **Physical evidence:** Generated test traces and offline alerts do not by themselves prove physical robot movement, denial of service, or prevention.
 - **Responsible operation:** Use only on systems you own or are authorized to test. Keep motion-capable demonstrations isolated and supervised. Review raw captures for private or sensitive infrastructure information before sharing.
 
-## Research manuscript and AI assistance
+## AI assistance
 
-**Related manuscript**
 
-> Mahmoud Ahmed Khalifa, Ahmad Taher Azar, and Walid El-Shafai. **“Experimental CAN Security Evaluation of a Commercial Unmanned Ground Vehicle with Intrusion Detection and Authentication Monitoring.”** Research manuscript, 2026.
-
-**Publication link / DOI:** _Add a verified public link when available._ The manuscript is not included in this repository, and the presence of a manuscript does not imply acceptance or publication.
 
 **AI assistance disclosure:** Generative AI tools were used for aspects of brainstorming, debugging guidance, experimental planning support, and writing/editing assistance. Researchers reviewed the outputs against their expertise and available evidence and retain responsibility for experimental execution, accuracy, interpretations, and claims. See [`AI_USAGE.md`](AI_USAGE.md) for the project disclosure.
 
